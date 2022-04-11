@@ -12,11 +12,12 @@ const apiHandler: NextApiHandler = async (request, response) => {
 
     case 'POST':
       const taskName = request.body.taskName
-      await prisma.task.create({
+      const result = await prisma.task.create({
         data: {
           name: taskName,
         },
       })
+      response.json(result)
       break
 
     case 'PUT':

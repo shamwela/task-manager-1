@@ -1,6 +1,7 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { PrismaClient, Task } from '@prisma/client'
+import { useRouter } from 'next/router'
 
 const prisma = new PrismaClient()
 
@@ -14,14 +15,10 @@ export const getServerSideProps = async () => {
 const Home = ({ initialTasks }: { initialTasks: Task[] }) => {
   const [tasks, setTasks] = useState(initialTasks)
   const [taskName, setTaskName] = useState('')
+  const router = useRouter()
 
-  const getTasks = async () => {
-    const tasksResponse = await fetch('/api/tasks')
-    const tasks = await tasksResponse.json()
-    setTasks(tasks)
-  }
-
-  const createTask = async () => {
+  const createTask = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     await fetch('/api/tasks', {
       method: 'POST',
       body: JSON.stringify({ taskName }),
@@ -29,7 +26,8 @@ const Home = ({ initialTasks }: { initialTasks: Task[] }) => {
         'Content-Type': 'application/json',
       },
     })
-    getTasks()
+
+    router.reload()
   }
 
   // const toggleCompletion = async (id: string, completed: boolean) => {
