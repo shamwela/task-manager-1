@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import { Task } from '@prisma/client'
+import { PrismaClient, Task } from '@prisma/client'
 
-export const getStaticProps = async () => {
-  const tasksResponse = await fetch('http://localhost:3000//api/tasks')
-  const initialTasks = await tasksResponse.json()
+const prisma = new PrismaClient()
+
+export const getServerSideProps = async () => {
+  const initialTasks = await prisma.task.findMany()
   return {
     props: { initialTasks },
   }
