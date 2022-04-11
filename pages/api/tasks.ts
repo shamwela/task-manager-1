@@ -17,7 +17,7 @@ const apiHandler: NextApiHandler = async (request, response) => {
 
     case 'GET':
       const tasks = await prisma.task.findMany()
-      response.status(200).json(tasks)
+      response.json(tasks)
       break
 
     case 'PUT':
