@@ -42,33 +42,60 @@ const Home = ({ tasks }: { tasks: Task[] }) => {
     router.reload()
   }
 
+  const deleteTask = async (id: string) => {
+    await fetch('/api/tasks', {
+      method: 'DELETE',
+      body: JSON.stringify({ id }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    router.reload()
+  }
+
   return (
     <>
       <Head>
         <title>Task manager 1</title>
       </Head>
 
-      {tasks.map(({ id, name, completed }) => {
-        return (
-          <div
-            onClick={() => toggleCompletion(id, completed)}
-            key={id}
-            className={`${completed ? 'line-through' : ''} cursor-pointer`}
-          >
-            {name}
-          </div>
-        )
-      })}
-
-      <form onSubmit={createTask}>
-        <input
-          value={taskName}
-          onChange={(event) => setTaskName(event.target.value)}
-          type='text'
-          required
-        />
-        <button type='submit'>Add</button>
-      </form>
+      <main className='max-w-xs'>
+        <div className='flex flex-col gap-y-4'>
+          {tasks.map(({ id, name, completed }) => {
+            return (
+              <div key={id} className='flex justify-between'>
+                <span
+                  onClick={() => toggleCompletion(id, completed)}
+                  className={`${
+                    completed ? 'line-through' : ''
+                  } cursor-pointer`}
+                >
+                  {name}
+                </span>
+                <button
+                  onClick={() => deleteTask(id)}
+                  className='bg-red-900 px-2 py-1'
+                >
+                  Delete
+                </button>
+              </div>
+            )
+          })}
+        </div>
+        <form onSubmit={createTask}>
+          <input
+            value={taskName}
+            onChange={(event) => setTaskName(event.target.value)}
+            type='text'
+            required
+            className='px-2 py-1'
+          />
+          <button type='submit' className='bg-blue-600 px-2 py-1'>
+            Add
+          </button>
+        </form>
+      </main>
     </>
   )
 }

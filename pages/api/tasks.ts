@@ -5,19 +5,19 @@ const prisma = new PrismaClient()
 
 const apiHandler: NextApiHandler = async (request, response) => {
   switch (request.method) {
-    case 'GET':
-      const tasks = await prisma.task.findMany()
-      response.status(200).json(tasks)
-      break
-
     case 'POST':
-      const taskName = request.body.taskName
+      const { taskName } = request.body
       const newTask = await prisma.task.create({
         data: {
           name: taskName,
         },
       })
       response.json(newTask)
+      break
+
+    case 'GET':
+      const tasks = await prisma.task.findMany()
+      response.status(200).json(tasks)
       break
 
     case 'PUT':
@@ -29,6 +29,14 @@ const apiHandler: NextApiHandler = async (request, response) => {
         },
       })
       response.json(updatedTask)
+      break
+
+    case 'DELETE':
+      const deletedTaskId = request.body.id
+      const deletedTask = await prisma.task.delete({
+        where: { id: deletedTaskId },
+      })
+      response.json(deletedTask)
       break
 
     default:
