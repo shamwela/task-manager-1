@@ -6,11 +6,11 @@
   *,
   ::before,
   ::after {
-    @apply text-secondary;
+    @apply text-secondary text-lg;
   }
 
   body {
-    @apply bg-primary;
+    @apply bg-primary p-4 min-h-screen;
   }
 
   h1,

@@ -6,19 +6,19 @@ import { useRouter } from 'next/router'
 const prisma = new PrismaClient()
 
 export const getServerSideProps = async () => {
-  const initialTasks = await prisma.task.findMany()
+  const tasks = await prisma.task.findMany()
   return {
-    props: { initialTasks },
+    props: { tasks },
   }
 }
 
-const Home = ({ initialTasks }: { initialTasks: Task[] }) => {
-  const [tasks, setTasks] = useState(initialTasks)
+const Home = ({ tasks }: { tasks: Task[] }) => {
   const [taskName, setTaskName] = useState('')
   const router = useRouter()
 
   const createTask = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
     await fetch('/api/tasks', {
       method: 'POST',
       body: JSON.stringify({ taskName }),
@@ -30,16 +30,17 @@ const Home = ({ initialTasks }: { initialTasks: Task[] }) => {
     router.reload()
   }
 
-  // const toggleCompletion = async (id: string, completed: boolean) => {
-  //   await fetch('/api/tasks', {
-  //     method: 'PUT',
-  //     body: JSON.stringify({ id, completed }),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //   getTasks()
-  // }
+  const toggleCompletion = async (id: string, completed: boolean) => {
+    await fetch('/api/tasks', {
+      method: 'PUT',
+      body: JSON.stringify({ id, completed }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    router.reload()
+  }
 
   return (
     <>
@@ -50,9 +51,9 @@ const Home = ({ initialTasks }: { initialTasks: Task[] }) => {
       {tasks.map(({ id, name, completed }) => {
         return (
           <div
-            // onClick={() => toggleCompletion(id, completed)}
+            onClick={() => toggleCompletion(id, completed)}
             key={id}
-            className={completed ? 'line-through' : undefined}
+            className={`${completed ? 'line-through' : ''} cursor-pointer`}
           >
             {name}
           </div>
