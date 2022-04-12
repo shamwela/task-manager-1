@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import React, { useState } from 'react'
+import { useState } from 'react'
+import type { FormEvent } from 'react'
 import { PrismaClient, Task } from '@prisma/client'
 import { useRouter } from 'next/router'
 
@@ -16,7 +17,7 @@ const Home = ({ tasks }: { tasks: Task[] }) => {
   const [taskName, setTaskName] = useState('')
   const router = useRouter()
 
-  const createTask = async (event: React.FormEvent<HTMLFormElement>) => {
+  const createTask = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     await fetch('/api/tasks', {

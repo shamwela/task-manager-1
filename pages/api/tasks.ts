@@ -15,11 +15,6 @@ const apiHandler: NextApiHandler = async (request, response) => {
       response.json(newTask)
       break
 
-    case 'GET':
-      const tasks = await prisma.task.findMany()
-      response.json(tasks)
-      break
-
     case 'PUT':
       const { id, completed } = request.body
       const updatedTask = await prisma.task.update({
@@ -37,9 +32,6 @@ const apiHandler: NextApiHandler = async (request, response) => {
         where: { id: deletedTaskId },
       })
       response.json(deletedTask)
-      break
-
-    default:
       break
   }
 }
