@@ -59,6 +59,7 @@ const Home = ({ tasks }: { tasks: Task[] }) => {
     <>
       <Head>
         <title>Task manager 1</title>
+        <meta name='description' content='Task manager 1' />
       </Head>
 
       <main className='max-w-xs'>
@@ -89,6 +90,7 @@ const Home = ({ tasks }: { tasks: Task[] }) => {
             value={taskName}
             onChange={(event) => setTaskName(event.target.value)}
             type='text'
+            aria-label='New task name'
             required
             className='px-2 py-1'
           />
